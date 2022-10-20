@@ -2,5 +2,7 @@
 window.addEventListener("keydown", function (e) {
   // looks for one element with the audio tag that corresponds with the key pressed
   const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
-  console.log(audio);
+  if (!audio) return; // if no audio found, stops function from running altogether
+
+  audio.play(); // plays the .wav file that corresponds to the key code
 });
