@@ -13,3 +13,5 @@ window.addEventListener("keydown", function (e) {
 
   key.classList.add("playing"); // adds the css class "playing" on key press
 });
+
+const keys = document.querySelectorAll('.key'); // gives an array of every element matched
