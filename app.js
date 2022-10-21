@@ -10,4 +10,6 @@ window.addEventListener("keydown", function (e) {
   audio.currentTime = 0; // rewinds audio from start instead of waiting for .wav file to finish before playing again
   audio.play(); // plays the .wav file that corresponds to the key code
   console.log(key);
+
+  key.classList.add("playing"); // adds the css class "playing" on key press
 });
