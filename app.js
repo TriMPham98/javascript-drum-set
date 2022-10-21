@@ -16,8 +16,8 @@ window.addEventListener("keydown", function (e) {
 function removeTransition(e) {
   if (e.propertyName != "transform") return; // skip if it's not a transform
 
-  this.classList.remove("playing")
+  this.classList.remove("playing") // removes the css class "playing" once transition is done
 }
 
 const keys = document.querySelectorAll(".key"); // gives an array of every element matched
-keys.forEach((key) => key.addEventListener("transitionend", removeTransition));
+keys.forEach((key) => key.addEventListener("transitionEnd", removeTransition)); // calls the removeTransition function
