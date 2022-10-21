@@ -20,4 +20,4 @@ function removeTransition(e) {
 }
 
 const keys = document.querySelectorAll(".key"); // gives an array of every element matched
-keys.forEach((key) => key.addEventListener("transitionEnd", removeTransition)); // calls the removeTransition function
+keys.forEach((key) => key.addEventListener("transitionend", removeTransition)); // calls the removeTransition function
