@@ -20,7 +20,7 @@ html {
 }
 
 .key {
-  border: 0.4rem solid black;
+  border: 0.4rem solid white;
   border-radius: 0.5rem;
   margin: 1rem;
   font-size: 1.5rem;
@@ -29,7 +29,7 @@ html {
   width: 10rem;
   text-align: center;
   color: white;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.69);
   text-shadow: 0 0 0.5rem black;
 }
 
