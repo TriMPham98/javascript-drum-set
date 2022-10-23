@@ -13,11 +13,9 @@ function playSound(e) {
 }
 
 function removeTransition(e) {
-
   this.classList.remove("playing"); // removes the css class "playing" once transition is done
 }
 
 const keys = document.querySelectorAll(".key"); // gives an array of every element matched
 keys.forEach((key) => key.addEventListener("transitionend", removeTransition)); // calls the removeTransition function
 window.addEventListener("keydown", playSound);
-
