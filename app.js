@@ -6,6 +6,8 @@ function playSound(e) {
   // looks for one element with the key tag that corresponds with the key pressed
   const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
 
+  // TODO: Add Hi Hat Sizzle using conditional
+
   audio.currentTime = 0; // rewinds audio from start instead of waiting for .wav file to finish before playing again
   audio.play(); // plays the .wav file that corresponds to the key code
 
