@@ -13,7 +13,6 @@ function playSound(e) {
 }
 
 function removeTransition(e) {
-  if (e.propertyName != "transform") return; // skip if it's not a transform
 
   this.classList.remove("playing"); // removes the css class "playing" once transition is done
 }
