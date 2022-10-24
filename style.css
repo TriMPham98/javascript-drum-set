@@ -34,7 +34,7 @@ html {
 }
 
 .playing {
-  transform: translateY(-5rem);
+  transform: translateY(-10rem);
   border-color: #ffc600;
   box-shadow: 0 0 1rem #ffc600;
 }
