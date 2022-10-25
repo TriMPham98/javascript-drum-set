@@ -24,6 +24,14 @@ function isClosedOrFootHiHat(AUDIO) {
   );
 }
 
+function stopOpenHiHat() {
+  const OPEN_HIHAT_AUDIO_KEY = "72";
+  const openHiHatAudio = document.querySelector(
+    `audio[data-key="${OPEN_HIHAT_AUDIO_KEY}"]`
+  );
+  if (isPlaying(openHiHatAudio)) stopAudio(openHiHatAudio);
+}
+
 function stopAudio(AUDIO) {
   AUDIO.pause();
   AUDIO.currentTime = 0;
