@@ -7,6 +7,7 @@ function playSound(e) {
   const KEY = document.querySelector(`.key[data-key="${e.keyCode}"]`);
 
   // TODO: Add Hi Hat Sizzle using conditional
+  if (isClosedOrFootHiHat(AUDIO)) stopOpenHiHat();
 
   AUDIO.currentTime = 0; // rewinds audio from start instead of waiting for .wav file to finish before playing again
   AUDIO.play(); // plays the .wav file that corresponds to the key code
