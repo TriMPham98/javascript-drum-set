@@ -14,6 +14,16 @@ function playSound(e) {
   KEY.classList.add("playing"); // adds the css class "playing" on key press
 }
 
+function isClosedOrFootHiHat(AUDIO) {
+  const HIHAT_AUDIO_KEY = "70";
+  const HIHAT_FOOT_AUDIO_KEY = "71";
+  const currentAudioKey = AUDIO.getAttribute("data-key");
+  return (
+    currentAudioKey == HIHAT_AUDIO_KEY ||
+    currentAudioKey == HIHAT_FOOT_AUDIO_KEY
+  );
+}
+
 function removeTransition(e) {
   this.classList.remove("playing"); // removes the css class "playing" once transition is done
 }
