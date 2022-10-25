@@ -24,9 +24,13 @@ function isClosedOrFootHiHat(AUDIO) {
   );
 }
 
-function stopAudio(audio) {
-  audio.pause();
-  audio.currentTime = 0;
+function stopAudio(AUDIO) {
+  AUDIO.pause();
+  AUDIO.currentTime = 0;
+}
+
+function isPlaying(AUDIO) {
+  return AUDIO.currentTime;
 }
 
 function removeTransition(e) {
