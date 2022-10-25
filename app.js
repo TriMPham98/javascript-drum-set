@@ -24,6 +24,11 @@ function isClosedOrFootHiHat(AUDIO) {
   );
 }
 
+function stopAudio(audio) {
+  audio.pause();
+  audio.currentTime = 0;
+}
+
 function removeTransition(e) {
   this.classList.remove("playing"); // removes the css class "playing" once transition is done
 }
