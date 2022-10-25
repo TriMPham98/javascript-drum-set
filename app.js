@@ -17,7 +17,7 @@ function playSound(e) {
 
 function isClosedOrFootHiHat(AUDIO) {
   const HIHAT_AUDIO_KEY = "70";
-  const HIHAT_FOOT_AUDIO_KEY = "71";
+  const HIHAT_FOOT_AUDIO_KEY = "84";
   const currentAudioKey = AUDIO.getAttribute("data-key");
   return (
     currentAudioKey == HIHAT_AUDIO_KEY ||
