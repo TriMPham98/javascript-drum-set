@@ -5,6 +5,6 @@ Features:
 - Animation on key press
 - <em>Hi Hat Sizzle</em>: stops the open hi hat from ringing when closed or foot hi hat key is pressed 
 
-![Screen Shot 2022-10-25 at 1 49 33 PM](https://user-images.githubusercontent.com/70353051/197879094-00984e18-48e0-4fd4-84be-4a3ec8590a49.png)
+https://user-images.githubusercontent.com/70353051/236534248-53535038-a2d2-412c-8a36-f6c017ea2a13.mp4
 
 Background image credit: Gabriel Barletta @ Unsplash
