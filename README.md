@@ -1,4 +1,4 @@
-# javascript-drum-set
+# JavaScript Drum Set
 This is a web application that lets you play the drum set using the keyboard. 🥁
 
 Features:
