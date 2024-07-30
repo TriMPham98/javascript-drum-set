@@ -1,24 +1,26 @@
 function playSound(e) {
-  // looks for one element with the audio tag that corresponds with the key pressed
-  const AUDIO = document.querySelector(`audio[data-key="${e.keyCode}"]`);
-  if (!AUDIO) return; // if no audio found, stops function from running altogether
+  const key =
+    e.type === "click"
+      ? e.target.closest(".key")
+      : document.querySelector(`.key[data-key="${e.keyCode}"]`);
+  const audio = document.querySelector(
+    `audio[data-key="${key ? key.getAttribute("data-key") : e.keyCode}"]`
+  );
 
-  // looks for one element with the key tag that corresponds with the key pressed
-  const KEY = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+  if (!audio) return;
 
-  // TODO: Add Hi Hat Sizzle using conditional
-  if (isClosedOrFootHiHat(AUDIO)) stopOpenHiHat();
+  if (isClosedOrFootHiHat(audio)) stopOpenHiHat();
 
-  AUDIO.currentTime = 0; // rewinds audio from start instead of waiting for .wav file to finish before playing again
-  AUDIO.play(); // plays the .wav file that corresponds to the key code
+  audio.currentTime = 0;
+  audio.play();
 
-  KEY.classList.add("playing"); // adds the css class "playing" on key press
+  key.classList.add("playing");
 }
 
-function isClosedOrFootHiHat(AUDIO) {
+function isClosedOrFootHiHat(audio) {
   const HIHAT_AUDIO_KEY = "70";
   const HIHAT_FOOT_AUDIO_KEY = "84";
-  const currentAudioKey = AUDIO.getAttribute("data-key");
+  const currentAudioKey = audio.getAttribute("data-key");
   return (
     currentAudioKey == HIHAT_AUDIO_KEY ||
     currentAudioKey == HIHAT_FOOT_AUDIO_KEY
@@ -33,19 +35,50 @@ function stopOpenHiHat() {
   if (isPlaying(openHiHatAudio)) stopAudio(openHiHatAudio);
 }
 
-function stopAudio(AUDIO) {
-  AUDIO.pause();
-  AUDIO.currentTime = 0;
+function stopAudio(audio) {
+  audio.pause();
+  audio.currentTime = 0;
 }
 
-function isPlaying(AUDIO) {
-  return AUDIO.currentTime;
+function isPlaying(audio) {
+  return !audio.paused;
 }
 
 function removeTransition(e) {
-  this.classList.remove("playing"); // removes the css class "playing" once transition is done
+  if (e.propertyName !== "transform") return;
+  this.classList.remove("playing");
 }
 
-const KEYS = document.querySelectorAll(".key"); // gives an array of every element matched
-KEYS.forEach((key) => key.addEventListener("transitionend", removeTransition)); // calls the removeTransition function
+function handleTouch(e) {
+  e.preventDefault();
+  const touch = e.changedTouches[0];
+  const key = document.elementFromPoint(touch.clientX, touch.clientY);
+  if (key && key.classList.contains("key")) {
+    playSound({ target: key });
+  }
+}
+
+const keys = document.querySelectorAll(".key");
+keys.forEach((key) => {
+  key.addEventListener("transitionend", removeTransition);
+  key.addEventListener("click", playSound);
+});
+
+// Event listeners
 window.addEventListener("keydown", playSound);
+
+// Add touch event listeners
+const keysContainer = document.querySelector(".keys");
+keysContainer.addEventListener("touchstart", handleTouch);
+keysContainer.addEventListener("touchend", (e) => {
+  e.preventDefault();
+  keys.forEach((key) => key.classList.remove("playing"));
+});
+
+// Prevent default touch behavior on the entire document
+document.body.addEventListener("touchstart", (e) => e.preventDefault(), {
+  passive: false,
+});
+document.body.addEventListener("touchend", (e) => e.preventDefault(), {
+  passive: false,
+});
