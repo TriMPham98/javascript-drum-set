@@ -17,6 +17,16 @@ function playSound(e) {
   key.classList.add("playing");
 }
 
+function removePlayingClass(e) {
+  if (e.propertyName !== "transform") return;
+  this.classList.remove("playing");
+}
+
+function handleKeyUp(e) {
+  const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+  if (key) key.classList.remove("playing");
+}
+
 function isClosedOrFootHiHat(audio) {
   const HIHAT_AUDIO_KEY = "70";
   const HIHAT_FOOT_AUDIO_KEY = "84";
@@ -44,11 +54,6 @@ function isPlaying(audio) {
   return !audio.paused;
 }
 
-function removeTransition(e) {
-  if (e.propertyName !== "transform") return;
-  this.classList.remove("playing");
-}
-
 function handleTouch(e) {
   e.preventDefault();
   const touch = e.changedTouches[0];
@@ -60,12 +65,13 @@ function handleTouch(e) {
 
 const keys = document.querySelectorAll(".key");
 keys.forEach((key) => {
-  key.addEventListener("transitionend", removeTransition);
+  key.addEventListener("transitionend", removePlayingClass);
   key.addEventListener("click", playSound);
 });
 
 // Event listeners
 window.addEventListener("keydown", playSound);
+window.addEventListener("keyup", handleKeyUp);
 
 // Add touch event listeners
 const keysContainer = document.querySelector(".keys");
