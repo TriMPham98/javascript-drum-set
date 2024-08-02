@@ -14,6 +14,16 @@ function playSound(e) {
   audio.currentTime = 0;
   audio.play();
 
+  // If the crash is played, also play the kick
+  if (audio.getAttribute("data-key") === "74") {
+    // 74 is the keyCode for "J" (crash)
+    const kickAudio = document.querySelector('audio[data-key="68"]'); // 68 is the keyCode for "D" (kick)
+    if (kickAudio) {
+      kickAudio.currentTime = 0;
+      kickAudio.play();
+    }
+  }
+
   key.classList.add("playing");
 }
 
