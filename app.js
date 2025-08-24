@@ -1,3 +1,7 @@
+let isRecording = false;
+let recordedNotes = [];
+let recordingStartTime = 0;
+
 function playSound(e) {
   const key =
     e.type === "click"
@@ -14,13 +18,26 @@ function playSound(e) {
   audio.currentTime = 0;
   audio.play();
 
+  // Record note if recording is active
+  if (isRecording) {
+    recordedNotes.push({
+      keyCode: key ? key.getAttribute("data-key") : e.keyCode,
+      time: Date.now() - recordingStartTime,
+    });
+  }
+
   // If the crash is played, also play the kick
   if (audio.getAttribute("data-key") === "74") {
-    // 74 is the keyCode for "J" (crash)
-    const kickAudio = document.querySelector('audio[data-key="68"]'); // 68 is the keyCode for "D" (kick)
+    const kickAudio = document.querySelector('audio[data-key="68"]');
     if (kickAudio) {
       kickAudio.currentTime = 0;
       kickAudio.play();
+      if (isRecording) {
+        recordedNotes.push({
+          keyCode: "68",
+          time: Date.now() - recordingStartTime,
+        });
+      }
     }
   }
 
@@ -73,6 +90,47 @@ function handleTouch(e) {
   }
 }
 
+function toggleRecording() {
+  isRecording = !isRecording;
+  const recordBtn = document.getElementById("recordBtn");
+  const playBtn = document.getElementById("playBtn");
+
+  if (isRecording) {
+    recordedNotes = [];
+    recordingStartTime = Date.now();
+    recordBtn.textContent = "Stop Recording";
+    playBtn.disabled = true;
+  } else {
+    recordBtn.textContent = "Record";
+    playBtn.disabled = recordedNotes.length === 0;
+  }
+}
+
+function playRecording() {
+  if (recordedNotes.length === 0) return;
+
+  const playBtn = document.getElementById("playBtn");
+  playBtn.disabled = true;
+
+  recordedNotes.forEach((note) => {
+    setTimeout(() => {
+      const audio = document.querySelector(`audio[data-key="${note.keyCode}"]`);
+      const key = document.querySelector(`.key[data-key="${note.keyCode}"]`);
+      if (audio && key) {
+        if (isClosedOrFootHiHat(audio)) stopOpenHiHat();
+        audio.currentTime = 0;
+        audio.play();
+        key.classList.add("playing");
+        setTimeout(() => key.classList.remove("playing"), 100);
+      }
+    }, note.time);
+  });
+
+  setTimeout(() => {
+    playBtn.disabled = false;
+  }, recordedNotes[recordedNotes.length - 1].time + 100);
+}
+
 const keys = document.querySelectorAll(".key");
 keys.forEach((key) => {
   key.addEventListener("transitionend", removePlayingClass);
@@ -98,3 +156,7 @@ document.body.addEventListener("touchstart", (e) => e.preventDefault(), {
 document.body.addEventListener("touchend", (e) => e.preventDefault(), {
   passive: false,
 });
+
+// Add recording controls event listeners
+document.getElementById("recordBtn").addEventListener("click", toggleRecording);
+document.getElementById("playBtn").addEventListener("click", playRecording);

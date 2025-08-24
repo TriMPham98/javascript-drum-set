@@ -11,6 +11,35 @@ html {
   font-family: sans-serif;
 }
 
+.controls {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.controls button {
+  padding: 1rem 2rem;
+  font-size: 1.6rem;
+  background: rgba(0, 0, 0, 0.69);
+  color: white;
+  border: 0.2rem solid #ffc600;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.controls button:hover {
+  background: #ffc600;
+  color: black;
+}
+
+.controls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .keys {
   display: flex;
   flex: 1;

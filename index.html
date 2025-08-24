@@ -10,6 +10,10 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <div class="controls">
+      <button id="recordBtn">Record</button>
+      <button id="playBtn" disabled>Play</button>
+    </div>
     <div class="keys">
       <div data-key="65" class="key">
         <kbd>A</kbd>
@@ -55,39 +59,29 @@
 
     <!-- A -->
     <audio data-key="65" src="sounds/snare3.wav"></audio>
-
     <!-- W -->
     <audio data-key="87" src="sounds/rimclick.wav"></audio>
-
     <!-- D -->
     <audio data-key="68" src="sounds/acoustic-kick_C_minor.wav"></audio>
-
     <!-- F -->
     <audio
       data-key="70"
       src="sounds/smooth-closed-high-hat-sound-a-key-04-tru.wav"></audio>
-
     <!-- T -->
     <audio data-key="84" src="sounds/hihatfoot.wav"></audio>
-
     <!-- H -->
     <audio data-key="72" src="sounds/karl-s-acoustic-open-hi-hat.wav"></audio>
-
     <!-- J -->
     <audio data-key="74" src="sounds/crash-f-sharp.wav"></audio>
-
     <!-- K -->
     <audio
       data-key="75"
       src="sounds/ride-cymbal-sound-clip-a-key-02-NnL.wav"></audio>
-
     <!-- O -->
     <audio
       data-key="79"
       src="sounds/ride-cymbal-sample-g-key-01-v20.wav"></audio>
-
     <!-- ; -->
-    <!-- Refactored tambourine to remove # symbol in file name -->
     <audio data-key="186" src="sounds/tambourine.wav"></audio>
 
     <script src="app.js"></script>
