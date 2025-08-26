@@ -2,6 +2,19 @@ let isRecording = false;
 let recordedNotes = [];
 let recordingStartTime = 0;
 
+const instruments = [
+  { key: "65", name: "snare", label: "A" },
+  { key: "87", name: "rim click", label: "W" },
+  { key: "68", name: "kick", label: "D" },
+  { key: "70", name: "hi hat", label: "F" },
+  { key: "84", name: "hi hat foot", label: "T" },
+  { key: "72", name: "open hat", label: "H" },
+  { key: "74", name: "crash", label: "J" },
+  { key: "75", name: "ride", label: "K" },
+  { key: "79", name: "ride bell", label: "O" },
+  { key: "186", name: "tambourine", label: ";" },
+];
+
 function playSound(e) {
   const key =
     e.type === "click"
@@ -94,15 +107,21 @@ function toggleRecording() {
   isRecording = !isRecording;
   const recordBtn = document.getElementById("recordBtn");
   const playBtn = document.getElementById("playBtn");
+  const quantizeBtn = document.getElementById("quantizeBtn");
+  const visualizeBtn = document.getElementById("visualizeBtn");
 
   if (isRecording) {
     recordedNotes = [];
     recordingStartTime = Date.now();
     recordBtn.textContent = "Stop Recording";
     playBtn.disabled = true;
+    quantizeBtn.disabled = true;
+    visualizeBtn.disabled = true;
   } else {
     recordBtn.textContent = "Record";
     playBtn.disabled = recordedNotes.length === 0;
+    quantizeBtn.disabled = recordedNotes.length === 0;
+    visualizeBtn.disabled = recordedNotes.length === 0;
   }
 }
 
@@ -129,6 +148,102 @@ function playRecording() {
   setTimeout(() => {
     playBtn.disabled = false;
   }, recordedNotes[recordedNotes.length - 1].time + 100);
+}
+
+function quantizeRecording() {
+  if (recordedNotes.length === 0) return;
+
+  const bpm = parseInt(document.getElementById("bpm").value) || 120;
+  const n = parseInt(document.getElementById("quantizeRes").value) || 16;
+  const msPerBeat = 60000 / bpm;
+  const snap = msPerBeat / (n / 4);
+
+  recordedNotes.forEach((note) => {
+    note.time = Math.round(note.time / snap) * snap;
+  });
+
+  // Sort notes by time in case of adjustments
+  recordedNotes.sort((a, b) => a.time - b.time);
+
+  visualizeRecording(); // Redraw after quantize
+}
+
+function visualizeRecording() {
+  const canvas = document.getElementById("visualization");
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  if (recordedNotes.length === 0) return;
+
+  const bpm = parseInt(document.getElementById("bpm").value) || 120;
+  const msPerBeat = 60000 / bpm;
+  const measures = 4;
+  const beatsPerMeasure = 4;
+  const totalBeats = measures * beatsPerMeasure;
+  const totalTime = msPerBeat * totalBeats;
+
+  const trackHeight = canvas.height / instruments.length;
+  const cellWidth = canvas.width / totalBeats;
+
+  // Draw grid
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
+  ctx.lineWidth = 1;
+
+  // Vertical lines (beats)
+  for (let i = 0; i <= totalBeats; i++) {
+    const x = i * cellWidth;
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, canvas.height);
+    ctx.stroke();
+  }
+
+  // Horizontal lines (instruments)
+  for (let i = 0; i <= instruments.length; i++) {
+    const y = i * trackHeight;
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(canvas.width, y);
+    ctx.stroke();
+  }
+
+  // Draw measure lines thicker
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
+  ctx.lineWidth = 2;
+  for (let i = 0; i <= measures; i++) {
+    const x = i * cellWidth * beatsPerMeasure;
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, canvas.height);
+    ctx.stroke();
+  }
+
+  // Draw track labels
+  ctx.font = "12px sans-serif";
+  ctx.fillStyle = "white";
+  instruments.forEach((inst, i) => {
+    ctx.fillText(
+      `${inst.label} ${inst.name}`,
+      10,
+      i * trackHeight + trackHeight / 2 + 4
+    );
+  });
+
+  // Draw notes
+  ctx.fillStyle = "#ffc600";
+  recordedNotes.forEach((note) => {
+    const instIndex = instruments.findIndex(
+      (i) => i.key === note.keyCode.toString()
+    );
+    if (instIndex !== -1 && note.time <= totalTime) {
+      const beat = Math.floor((note.time / msPerBeat) % totalBeats);
+      const x = beat * cellWidth + cellWidth / 2;
+      const y = instIndex * trackHeight + trackHeight / 2;
+      ctx.beginPath();
+      ctx.arc(x, y, 5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  });
 }
 
 const keys = document.querySelectorAll(".key");
@@ -160,3 +275,9 @@ document.body.addEventListener("touchend", (e) => e.preventDefault(), {
 // Add recording controls event listeners
 document.getElementById("recordBtn").addEventListener("click", toggleRecording);
 document.getElementById("playBtn").addEventListener("click", playRecording);
+document
+  .getElementById("quantizeBtn")
+  .addEventListener("click", quantizeRecording);
+document
+  .getElementById("visualizeBtn")
+  .addEventListener("click", visualizeRecording);

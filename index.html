@@ -13,6 +13,16 @@
     <div class="controls">
       <button id="recordBtn">Record</button>
       <button id="playBtn" disabled>Play</button>
+      <label for="bpm">BPM:</label>
+      <input type="number" id="bpm" value="120" min="60" max="200" />
+      <label for="quantizeRes">Quantize:</label>
+      <select id="quantizeRes">
+        <option value="4">Quarter</option>
+        <option value="8">Eighth</option>
+        <option value="16" selected>Sixteenth</option>
+      </select>
+      <button id="quantizeBtn" disabled>Quantize</button>
+      <button id="visualizeBtn" disabled>Visualize</button>
     </div>
     <div class="keys">
       <div data-key="65" class="key">
@@ -56,6 +66,7 @@
         <span class="sound">tambourine</span>
       </div>
     </div>
+    <canvas id="visualization" width="800" height="400"></canvas>
 
     <!-- A -->
     <audio data-key="65" src="sounds/snare3.wav"></audio>
