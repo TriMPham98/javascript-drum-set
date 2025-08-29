@@ -356,13 +356,18 @@ function clearGrid() {
   } else {
     grid.forEach((row) => row.fill(false));
   }
-  visualizeRecording();
+
+  // Only visualize if we're in sequencer mode
+  if (mode === "sequencer") {
+    visualizeRecording();
+  }
 }
 
 function toggleMode() {
   mode = mode === "live" ? "sequencer" : "live";
   const modeBtn = document.getElementById("modeBtn");
   const keys = document.querySelector(".keys");
+  const visualization = document.getElementById("visualization");
   const recordBtn = document.getElementById("recordBtn");
   const quantizeBtn = document.getElementById("quantizeBtn");
   const playBtn = document.getElementById("playBtn");
@@ -372,6 +377,7 @@ function toggleMode() {
   if (mode === "live") {
     modeBtn.textContent = "Switch to Sequencer";
     keys.classList.remove("hidden");
+    visualization.classList.add("hidden");
     recordBtn.disabled = false;
     quantizeBtn.disabled = recordedNotes.length === 0;
     playBtn.disabled = recordedNotes.length === 0;
@@ -382,6 +388,7 @@ function toggleMode() {
   } else {
     modeBtn.textContent = "Switch to Live";
     keys.classList.add("hidden");
+    visualization.classList.remove("hidden");
     recordBtn.disabled = true;
     quantizeBtn.disabled = true;
     playBtn.disabled = false;
@@ -390,7 +397,11 @@ function toggleMode() {
     document.getElementById("visualization").style.cursor = "pointer";
     recordedNotes = [];
   }
-  visualizeRecording();
+
+  // Only visualize if we're in sequencer mode
+  if (mode === "sequencer") {
+    visualizeRecording();
+  }
 }
 
 const keys = document.querySelectorAll(".key");
@@ -423,10 +434,20 @@ document.getElementById("stopBtn").addEventListener("click", stopPlaying);
 document
   .getElementById("quantizeBtn")
   .addEventListener("click", quantizeRecording);
-document
-  .getElementById("visualizeBtn")
-  .addEventListener("click", visualizeRecording);
+document.getElementById("visualizeBtn").addEventListener("click", () => {
+  if (mode === "sequencer") {
+    visualizeRecording();
+  }
+});
 document.getElementById("clearBtn").addEventListener("click", clearGrid);
 document.getElementById("visualization").addEventListener("click", toggleCell);
 
-visualizeRecording();
+// Initialize the interface based on current mode
+if (mode === "live") {
+  document.querySelector(".keys").classList.remove("hidden");
+  document.getElementById("visualization").classList.add("hidden");
+} else {
+  document.querySelector(".keys").classList.add("hidden");
+  document.getElementById("visualization").classList.remove("hidden");
+  visualizeRecording();
+}
